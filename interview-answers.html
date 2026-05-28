@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>面试答案整理</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7fa; color: #2c3e50; line-height: 1.7; }
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: white; padding: 48px 40px; }
+  .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+  .header p { opacity: 0.8; font-size: 1rem; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+  .toc { background: white; border-radius: 12px; padding: 28px 32px; margin-bottom: 36px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .toc h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: #1a1a2e; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 6px; }
+  .toc a { color: #0f3460; text-decoration: none; font-size: 0.95rem; }
+  .toc a:hover { text-decoration: underline; }
+  .project { background: white; border-radius: 12px; padding: 36px 40px; margin-bottom: 36px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .project-title { font-size: 1.4rem; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; padding-bottom: 14px; border-bottom: 2px solid #e8edf3; }
+  .project-tag { display: inline-block; background: #e8f4fd; color: #0f3460; font-size: 0.78rem; padding: 3px 10px; border-radius: 20px; margin-left: 10px; font-weight: 500; vertical-align: middle; }
+  .project-desc { color: #6b7a8d; font-size: 0.9rem; margin-top: 10px; margin-bottom: 24px; }
+  .qa-block { margin-bottom: 32px; border-left: 3px solid #0f3460; padding-left: 18px; }
+  .q-main { font-weight: 600; color: #1a1a2e; font-size: 1rem; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 8px; }
+  .q-main::before { content: "Q"; display: inline-block; background: #0f3460; color: white; font-size: 0.72rem; font-weight: 700; width: 20px; height: 20px; border-radius: 4px; text-align: center; line-height: 20px; flex-shrink: 0; margin-top: 2px; }
+  .followup-block { margin-top: 10px; margin-bottom: 16px; }
+  .followup-q { display: flex; align-items: flex-start; gap: 8px; padding: 10px 14px; background: #f8f9fc; border-radius: 8px 8px 0 0; font-size: 0.9rem; color: #3d4f63; font-weight: 500; border-bottom: 1px solid #e8edf3; }
+  .followup-q::before { content: "↳"; color: #e74c3c; font-weight: 700; flex-shrink: 0; }
+  .answer { padding: 14px 16px; background: #f0f7ff; border-radius: 0 0 8px 8px; font-size: 0.9rem; color: #1a2e4a; }
+  .answer p { margin-bottom: 8px; }
+  .answer p:last-child { margin-bottom: 0; }
+  .answer ul { padding-left: 18px; margin-top: 6px; }
+  .answer ul li { margin-bottom: 4px; }
+  .answer table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+  .answer table th { background: #dbeafe; padding: 8px 12px; text-align: left; font-weight: 600; }
+  .answer table td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; }
+  .answer table tr:last-child td { border-bottom: none; }
+  .answer .note { display: inline-block; background: #fef3c7; border: 1px solid #fbbf24; border-radius: 4px; padding: 2px 8px; font-size: 0.8rem; color: #92400e; margin-top: 8px; }
+  .section-label { display: inline-block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #e74c3c; background: #fef2f2; padding: 2px 8px; border-radius: 4px; margin-bottom: 14px; }
+  .main-answer { margin-top: 12px; padding: 16px 18px; background: #f0f7ff; border-radius: 8px; font-size: 0.92rem; color: #1a2e4a; }
+  .main-answer p { margin-bottom: 8px; }
+  .main-answer p:last-child { margin-bottom: 0; }
+  .main-answer ul { padding-left: 18px; margin-top: 6px; }
+  .main-answer ul li { margin-bottom: 4px; }
+  .main-answer table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+  .main-answer table th { background: #dbeafe; padding: 8px 12px; text-align: left; font-weight: 600; }
+  .main-answer table td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; }
+  .main-answer table tr:last-child td { border-bottom: none; }
+  .note { display: inline-block; background: #fef3c7; border: 1px solid #fbbf24; border-radius: 4px; padding: 2px 8px; font-size: 0.8rem; color: #92400e; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>面试答案整理</h1>
+  <p>逐题整理，持续更新</p>
+</div>
+
+<div class="container">
+
+  <div class="toc">
+    <h2>目录</h2>
+    <ol>
+      <li><a href="#p1">小团 Agent2.0 上下文工程重构</a>
+        <ol style="padding-left:16px;margin-top:4px;">
+          <li><a href="#p1-q1">Skill summary 如何设计？召回准确率如何评估？</a></li>
+        </ol>
+      </li>
+    </ol>
+  </div>
+
+  <!-- PROJECT 1 -->
+  <div class="project" id="p1">
+    <div class="project-title">小团 Agent2.0 上下文工程重构<span class="project-tag">核心项目</span></div>
+    <div class="project-desc">2025.12 - 2026.4 ｜ Token 消耗降低 70%，用户 7 天留存提升 8%</div>
+
+    <div class="section-label">渐进式披露 Skill 架构</div>
+
+    <div class="qa-block" id="p1-q1">
+      <div class="q-main">Skill summary 的内容是如何设计的？如果 summary 信息不足，模型会不会激活错误的 Skill？你们是怎么评估召回准确率的？</div>
+
+      <div class="main-answer">
+        <p>summary 不是对 Skill 功能的完整描述，而是帮助模型做路由决策的触发规则。我们的设计包含三个要素：</p>
+        <ul>
+          <li><strong>明确触发场景</strong>：用"当用户说 X 时触发"的句式，列出典型触发词和意图</li>
+          <li><strong>负样本边界</strong>：写清楚"不适用于 Y 场景，应使用 Z Skill"，防止误触发</li>
+          <li><strong>垂类关键词</strong>：餐饮类列出"预订、附近、推荐"；出行类列出"打车、导航、路线"</li>
+        </ul>
+        <p>模型确实可能激活错误的 Skill，有两类保护：对漏触发设置保守阈值，宁可多一次 tool call 按需激活；对误触发在 Skill 全文开头加"适用性检查"，模型加载后可自我判断放弃执行。</p>
+      </div>
+
+      <div class="followup-block">
+        <div class="followup-q">Skill 激活准确率具体是怎么评估的？</div>
+        <div class="answer">
+          <p>分两个阶段：</p>
+          <p><strong>上线前离线评测：</strong>人工编写标注 query 集，覆盖"应该触发"和"不应该触发"两类。不应该触发的样本刻意选近似负样本——与 Skill 话题相关但意图不同的 query。比如同样是餐厅场景，"找附近餐厅"应触发 search Skill，"这家餐厅评价怎么样"不该触发。用自动化脚本批量跑，每条 query 跑多次取触发率，处理模型随机性——以触发率是否超过阈值来判断 pass/fail，输出 precision 和 recall 指标，作为上线门槛。</p>
+          <p><strong>上线后持续审核：</strong>线上随机抽样，两层审核：先用更强的模型判断激活是否正确，再人工复核。发现问题后分析是 summary 描述模糊、边界不清，还是模型能力问题，针对性迭代 summary。</p>
+          <table>
+            <tr><th>维度</th><th>Claude Code 的做法</th><th>我们的做法</th></tr>
+            <tr><td>评估数据</td><td>人工预先标注 20 条</td><td>人工标注，覆盖正负样本</td></tr>
+            <tr><td>随机性处理</td><td>每条跑 3 次取触发率</td><td>跑多次取触发率</td></tr>
+            <tr><td>防过拟合</td><td>train/test 分离</td><td>暂无 holdout，是待改进点</td></tr>
+            <tr><td>上线后监控</td><td>无（纯离线）</td><td>随机抽样 + 双层审核</td></tr>
+          </table>
+          <span class="note">待改进：引入 train/test 分离，防止对着同一批 case 优化 summary 导致过拟合</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

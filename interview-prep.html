@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学习资料</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f7fa; color: #2c3e50; line-height: 1.7; }
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: white; padding: 48px 40px; }
+  .header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+  .header p { opacity: 0.8; font-size: 1rem; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+  .toc { background: white; border-radius: 12px; padding: 28px 32px; margin-bottom: 36px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .toc h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: #1a1a2e; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 6px; }
+  .toc a { color: #0f3460; text-decoration: none; font-size: 0.95rem; }
+  .toc a:hover { text-decoration: underline; }
+  .project { background: white; border-radius: 12px; padding: 36px 40px; margin-bottom: 36px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .project-title { font-size: 1.4rem; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; padding-bottom: 14px; border-bottom: 2px solid #e8edf3; }
+  .project-tag { display: inline-block; background: #e8f4fd; color: #0f3460; font-size: 0.78rem; padding: 3px 10px; border-radius: 20px; margin-left: 10px; font-weight: 500; vertical-align: middle; }
+  .project-desc { color: #6b7a8d; font-size: 0.9rem; margin-top: 10px; margin-bottom: 24px; }
+  .qa-block { margin-bottom: 28px; border-left: 3px solid #0f3460; padding-left: 18px; }
+  .q-main { font-weight: 600; color: #1a1a2e; font-size: 1rem; margin-bottom: 10px; cursor: pointer; display: flex; align-items: flex-start; gap: 8px; }
+  .q-main::before { content: "Q"; display: inline-block; background: #0f3460; color: white; font-size: 0.72rem; font-weight: 700; width: 20px; height: 20px; border-radius: 4px; text-align: center; line-height: 20px; flex-shrink: 0; margin-top: 2px; }
+  .followups { margin-top: 10px; }
+  .followup-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; padding: 10px 14px; background: #f8f9fc; border-radius: 8px; font-size: 0.9rem; color: #3d4f63; }
+  .followup-item::before { content: "↳"; color: #e74c3c; font-weight: 700; flex-shrink: 0; }
+  .answer-hint { margin-top: 14px; padding: 12px 16px; background: #fffbf0; border: 1px solid #fde68a; border-radius: 8px; font-size: 0.85rem; color: #92400e; }
+  .answer-hint strong { display: block; margin-bottom: 4px; }
+  .section-label { display: inline-block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #e74c3c; background: #fef2f2; padding: 2px 8px; border-radius: 4px; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>AI Agent 工程师面试准备资料</h1>
+  <p>学习要点</p>
+</div>
+
+<div class="container">
+
+  <div class="toc">
+    <h2>目录</h2>
+    <ol>
+      <li><a href="#p1">小团 Agent2.0 上下文工程重构（Token 降低 70%）</a></li>
+      <li><a href="#p2">AgentOS 业务接入与开放平台建设</a></li>
+      <li><a href="#p3">供给信息萃取系统 AI Coding 落地</a></li>
+      <li><a href="#p4">推荐链路埋点治理与性能优化</a></li>
+      <li><a href="#p5">渲染信息预调用优化</a></li>
+      <li><a href="#p6">请求 Mock 与调试回放平台</a></li>
+      <li><a href="#p7">推荐渲染服务技术重构</a></li>
+    </ol>
+  </div>
+
+  <!-- PROJECT 1 -->
+  <div class="project" id="p1">
+    <div class="project-title">小团 Agent2.0 上下文工程重构<span class="project-tag">核心项目</span></div>
+    <div class="project-desc">2025.12 - 2026.4 ｜ Token 消耗降低 70%，用户 7 天留存提升 8%</div>
+
+    <div class="section-label">渐进式披露 Skill 架构</div>
+
+    <div class="qa-block">
+      <div class="q-main">渐进式披露（Progressive Disclosure）的核心思路是什么？你们是怎么判断哪些 Skill 需要预加载、哪些只注入 summary？</div>
+      <div class="followups">
+        <div class="followup-item">Skill summary 的内容是如何设计的？如果 summary 信息不足，模型会不会激活错误的 Skill？你们是怎么评估召回准确率的？</div>
+        <div class="followup-item">按需激活的 tool call 链路上有额外延迟，用户侧能感知到吗？你们是如何在延迟和 Token 消耗之间做权衡的？</div>
+        <div class="followup-item">当用户意图跨多个垂类时，会同时激活多个 Skill 吗？这时候上下文管理如何处理？</div>
+      </div>
+      <div class="answer-hint">
+        <strong>考察方向：</strong>Skill 路由设计、召回精度评估、多轮对话下的 Skill 生命周期管理
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="q-main">你提到用 FreeMarker 模板动态渲染上下文，模板管理是怎么做版本控制和灰度的？</div>
+      <div class="followups">
+        <div class="followup-item">不同模型（大模型/SLM）对同一套 Prompt 模板的效果差异怎么处理？有没有遇到模板迁移导致效果劣化的情况？</div>
+        <div class="followup-item">模板参数是实验系统动态下发的，如果实验参数和模板字段不匹配，有什么防护机制？</div>
+      </div>
+    </div>
+
+    <div class="section-label">意图分流与入口网关</div>
+
+    <div class="qa-block">
+      <div class="q-main">入口网关的意图分流用了规则 + 小模型/SLM，这两者的分工是什么？规则覆盖哪些场景，SLM 补哪些？</div>
+      <div class="followups">
+        <div class="followup-item">SLM 的分类效果是怎么衡量的？如果 SLM 判错导致走了错误路径，有什么兜底机制？</div>
+        <div class="followup-item">简单意图走"传统搜索 + 大模型总结"，这条链路相比 Agent 全流程的体验差异用户能接受吗？你们怎么定义"简单意图"的边界？</div>
+        <div class="followup-item">随着业务迭代，意图类别会增加，规则维护成本会不会越来越高？有没有自动化的规则生成或更新机制？</div>
+      </div>
+    </div>
+
+    <div class="section-label">记忆压缩与知识库</div>
+
+    <div class="qa-block">
+      <div class="q-main">记忆压缩里"规则裁剪工具调用明细"是怎么做的？你们的裁剪规则是什么，有没有因为裁剪丢失关键上下文导致模型答错的 case？</div>
+      <div class="followups">
+        <div class="followup-item">全局摘要是实时生成还是按轮次更新的？摘要本身的质量怎么保证，有没有摘要信息失真的问题？</div>
+        <div class="followup-item">长期记忆是通过"标签配置 + 离线任务"提取的，提取准确率怎么样？用户隐私和记忆存储有没有做过专门的合规设计？</div>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="q-main">知识库链路里，文档分片策略是怎么设计的？分片粒度对检索效果有什么影响？</div>
+      <div class="followups">
+        <div class="followup-item">结构化数据离线 pipeline 和向量检索的文档是统一索引还是分开索引？检索时怎么融合结构化和非结构化的结果？</div>
+        <div class="followup-item">知识库的更新频率是多少？增量更新时如何避免索引不一致？</div>
+      </div>
+    </div>
+
+    <div class="section-label">多级缓存与结果指标</div>
+
+    <div class="qa-block">
+      <div class="q-main">多级缓存基于"query 相似度 + 地理位置"，query 相似度是怎么计算的？阈值怎么定？缓存命中错误的 case 怎么处理？</div>
+      <div class="followups">
+        <div class="followup-item">缓存失效策略是什么？供给信息实时性要求高的场景（比如商家营业状态），怎么保证缓存不影响准确性？</div>
+        <div class="followup-item">Token 降低 70% 是怎么测量的？是单次对话的平均 Token 数，还是某个时间周期的总量对比？有没有 Token 减少但质量下降的情况？</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 2 -->
+  <div class="project" id="p2">
+    <div class="project-title">AgentOS 业务接入与开放平台建设<span class="project-tag">平台化</span></div>
+    <div class="project-desc">2025.10 - 至今 ｜ 支持 10+ 业务线接入，高频需求配置化</div>
+
+    <div class="section-label">平台抽象与协议设计</div>
+
+    <div class="qa-block">
+      <div class="q-main">你们抽象了"统一协议规范"，覆盖欢迎语、推荐问、AI 技能、运营干预等场景。这个协议是怎么设计出来的？迭代过程中有没有遇到协议不兼容需要升级的问题？</div>
+      <div class="followups">
+        <div class="followup-item">不同业务线的个性化需求和通用协议之间怎么平衡？有没有某个业务因为协议限制无法接入，最终走了定制开发的 case？</div>
+        <div class="followup-item">协议版本升级时，已接入的业务方如何做兼容性迁移？有没有设计协议版本机制？</div>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="q-main">消息强插、消息修改、消息推送更新是什么场景用到的？这三种能力的实现有什么技术难点？</div>
+      <div class="followups">
+        <div class="followup-item">消息强插如果和 Agent 正在生成的回复冲突，怎么处理？用户侧的体验是什么样的？</div>
+        <div class="followup-item">消息推送更新是 SSE 还是 WebSocket？在弱网或断线重连场景下的可靠性怎么保证？</div>
+      </div>
+    </div>
+
+    <div class="section-label">Skill 开放平台</div>
+
+    <div class="qa-block">
+      <div class="q-main">Skill 从创建、调试到上线的完整通路是什么样的？一个业务开发者接入新 Skill 需要经过哪些步骤？</div>
+      <div class="followups">
+        <div class="followup-item">Skill 调试阶段怎么隔离线上流量？有没有 Skill 级别的灰度机制？</div>
+        <div class="followup-item">Skill 上线后如果出现 badcase，回滚机制是什么？能做到秒级回滚吗？</div>
+        <div class="followup-item">开放平台未来如果对外开放（第三方接入），安全性和权限控制怎么设计？</div>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="q-main">"高频业务需求沉淀为平台配置能力"——你们用什么标准判断一个需求值得平台化而不是继续走代码开发？</div>
+      <div class="followups">
+        <div class="followup-item">配置化开发和代码开发的边界在哪里？有没有遇到过度配置化导致平台逻辑复杂难以维护的情况？</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 3 -->
+  <div class="project" id="p3">
+    <div class="project-title">供给信息萃取系统 AI Coding 落地<span class="project-tag">AI Coding</span></div>
+    <div class="project-desc">2026.4 - 至今 ｜ 一周上线，400+ 餐厅采样</div>
+
+    <div class="section-label">AI Coding 工作流</div>
+
+    <div class="qa-block">
+      <div class="q-main">你用 Claude Code 完成了整个系统，能描述一下你的具体工作流吗？哪些部分 AI 生成后直接用了，哪些需要大量人工修改？</div>
+      <div class="followups">
+        <div class="followup-item">AI 生成代码在代码质量、安全性（如 SQL 注入、权限校验）方面有没有问题？你是如何做 review 的？</div>
+        <div class="followup-item">借助 AI Coding 检索内网文档并完成接口接入，这个过程遇到了哪些挑战？AI 对内网私有 API 文档的理解准确吗？</div>
+        <div class="followup-item">一周上线是在什么质量标准下的"上线"？测试覆盖度如何？</div>
+      </div>
+    </div>
+
+    <div class="section-label">系统设计</div>
+
+    <div class="qa-block">
+      <div class="q-main">基于 Airflow 的 DAG 多任务编排，视频处理、模型萃取、结果融合这几个节点之间的依赖关系是什么？哪个节点是瓶颈？</div>
+      <div class="followups">
+        <div class="followup-item">视频处理节点的并发度怎么控制？大量视频同时提交时怎么做流量控制？</div>
+        <div class="followup-item">模型萃取的 Prompt 是怎么设计的？萃取结构化信息时模型的幻觉问题怎么处理？</div>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="q-main">任务状态流转和失败重试机制，失败的粒度是什么？是整个 DAG 重跑还是从失败节点重跑？</div>
+      <div class="followups">
+        <div class="followup-item">异步结果上报是通过什么方式通知下游的？如果上报超时怎么处理？</div>
+        <div class="followup-item">多阶段 Prompt 调试是如何进行的？Prompt 版本管理是怎么做的？</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 4 -->
+  <div class="project" id="p4">
+    <div class="project-title">推荐链路埋点治理与性能优化<span class="project-tag">性能优化</span></div>
+    <div class="project-desc">2025.8 ｜ 端到端耗时降低 140ms</div>
+
+    <div class="section-label">埋点治理方案</div>
+
+    <div class="qa-block">
+      <div class="q-main">用 Java 反射打点来建设埋点使用监控，这个方案的原理是什么？性能开销可以接受吗？</div>
+      <div class="followups">
+        <div class="followup-item">反射监控是在线上环境全量采集的吗？如果是抽样，怎么保证监控数据的准确性？</div>
+        <div class="followup-item">识别"字段访问情况"——对于一个字段，有 10 个下游但其中 5 个从没访问过，你们是直接判定为可废弃吗？会不会有漏报？</div>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="q-main">你们对字段分了三级处理策略（裁剪/转存/保留），"转存到 Kafka 写 Hive" 这个方案有什么优缺点？</div>
+      <div class="followups">
+        <div class="followup-item">下游业务通过联表查询访问转存字段，这个查询延迟业务方能接受吗？有没有业务方投诉？</div>
+        <div class="followup-item">灰度放量从 1% 开始，你们用什么指标判断可以继续放量？出现过需要回滚的情况吗？</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 5 -->
+  <div class="project" id="p5">
+    <div class="project-title">渲染信息预调用优化<span class="project-tag">性能优化</span></div>
+    <div class="project-desc">2024.10 - 2024.12 ｜ 接口耗时降低 40ms</div>
+
+    <div class="section-label">预调用方案设计</div>
+
+    <div class="qa-block">
+      <div class="q-main">这个预调用方案的核心假设是"直播/特团召回先完成，全量召回后完成"。如果这个假设在某些情况下不成立（比如直播召回慢了），预调用的结果会如何处理？</div>
+      <div class="followups">
+        <div class="followup-item">预调用的结果 PUT 进 Guava 缓存，如果全量召回返回时缓存刚好过期，怎么处理？缓存有效期是怎么设定的？</div>
+        <div class="followup-item">异步推送和全量召回返回之间存在时序问题，你们是怎么处理竞态条件的？有没有用锁或版本号？</div>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="q-main">预调用增加了渲染服务的主动请求量，在请求量增加的情况下如何保证渲染信息接口的稳定性？</div>
+      <div class="followups">
+        <div class="followup-item">预调用的结果如果和最终需要渲染的供给集合不完全匹配（比如全量召回后某些直播下线了），缓存里的无效结果怎么处理？</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 6 -->
+  <div class="project" id="p6">
+    <div class="project-title">请求 Mock 与调试回放平台<span class="project-tag">工程工具</span></div>
+    <div class="project-desc">长期维护迭代 ｜ badcase 排查从小时级降低到分钟级</div>
+
+    <div class="section-label">采集与存储</div>
+
+    <div class="qa-block">
+      <div class="q-main">采集对象选了"全体美团员工 + 部分重点商家客诉人群"，为什么不用全量采集？这个圈选策略会不会有采样偏差，导致覆盖不到某类 badcase？</div>
+      <div class="followups">
+        <div class="followup-item">采集到的请求数据包含用户隐私信息，数据安全和访问控制是怎么做的？</div>
+        <div class="followup-item">gzip 压缩之后的存储成本大概是多少？数据保留周期是多长？</div>
+      </div>
+    </div>
+
+    <div class="section-label">回放与调试</div>
+
+    <div class="qa-block">
+      <div class="q-main">基于 traceId 查询 LogCenter 来回放请求，这个回放能还原多少线上上下文？有哪些信息是无法回放的（比如实时特征、AB 实验状态）？</div>
+      <div class="followups">
+        <div class="followup-item">"强插供给"这个调试能力在线上生产环境开放吗？有没有被滥用的风险，权限控制是怎么做的？</div>
+        <div class="followup-item">这套工具从后端团队推广到算法、测试、前端团队，不同团队的使用诉求有什么差异？有没有因为诉求差异大导致功能互相干扰的问题？</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECT 7 -->
+  <div class="project" id="p7">
+    <div class="project-title">推荐渲染服务技术重构<span class="project-tag">架构重构</span></div>
+    <div class="project-desc">2024.12 - 2025.3 ｜ 需求开发效率提升 30%+</div>
+
+    <div class="section-label">架构设计</div>
+
+    <div class="qa-block">
+      <div class="q-main">你们把渲染服务拆成 IO、渲染算子、数据映射 3 层，各层之间的数据传递是怎么设计的？有没有引入中间数据对象（DTO/VO）？</div>
+      <div class="followups">
+        <div class="followup-item">DAG 执行图的编排是静态配置还是动态生成的？DAG 节点之间的数据依赖怎么声明？</div>
+        <div class="followup-item">注解约束算子声明和路由映射，如果有人绕过注解直接写逻辑，有没有编译期或运行期的检测机制？</div>
+      </div>
+    </div>
+
+    <div class="qa-block">
+      <div class="q-main">重构是在不停服的情况下做的吗？新旧架构并行期间的流量切换是怎么做的？</div>
+      <div class="followups">
+        <div class="followup-item">你提到"为 AI Coding 提供更稳定的代码基础"，能具体说说重构前后 AI Coding 的效率差异有多大？用什么指标衡量的？</div>
+        <div class="followup-item">需求开发效率提升 30% 是怎么测量的？是通过需求周期数据，还是开发者主观反馈？</div>
+      </div>
+    </div>
+
+    <div class="section-label">重构方法论</div>
+
+    <div class="qa-block">
+      <div class="q-main">面对一个"职责边界不清、数据模型混用"的老系统，你们是怎么推进重构的？有没有遇到业务方不愿意配合冻结需求的情况？</div>
+      <div class="followups">
+        <div class="followup-item">重构过程中怎么保证线上稳定性？有没有设置对比实验来验证重构前后结果一致性？</div>
+        <div class="followup-item">如果你现在重新做这个重构，有没有什么地方会做得不一样？</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
